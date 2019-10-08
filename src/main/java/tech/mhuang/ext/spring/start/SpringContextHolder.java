@@ -1,16 +1,14 @@
 package tech.mhuang.ext.spring.start;
 
-import tech.mhuang.core.util.CollectionUtil;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import tech.mhuang.core.util.CollectionUtil;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
  * spring启动装载类
  *
  * @author mhuang
@@ -20,7 +18,7 @@ public class SpringContextHolder implements ApplicationContextAware {
 
     private static ApplicationContext applicationContext;
 
-    private static DefaultListableBeanFactory beanFacotory;
+    private static DefaultListableBeanFactory beanFactory;
 
     /**
      * 获取上下文
@@ -40,7 +38,7 @@ public class SpringContextHolder implements ApplicationContextAware {
     public void setApplicationContext(ApplicationContext applicationContext) {
         if (SpringContextHolder.applicationContext == null) {
             SpringContextHolder.applicationContext = applicationContext;
-            beanFacotory = (DefaultListableBeanFactory) applicationContext.getAutowireCapableBeanFactory();
+            beanFactory = (DefaultListableBeanFactory) applicationContext.getAutowireCapableBeanFactory();
         }
     }
 
@@ -59,7 +57,7 @@ public class SpringContextHolder implements ApplicationContextAware {
      *
      * @param name  bean方法名
      * @param clazz 获取Bean指定的class
-     * @param <T> 获取Bean指定的Class类型
+     * @param <T>   获取Bean指定的Class类型
      * @return BeanName的Bean
      */
 
@@ -73,35 +71,36 @@ public class SpringContextHolder implements ApplicationContextAware {
      * @param name 删除的BeanName
      */
     public static void removeBean(String name) {
-        beanFacotory.removeBeanDefinition(name);
-    }
-
-    /**
-     * bean注册
-     * @param beanName 注册的Bean Name
-     * @param clazz 注册的Bean class
-     * @param <T> 注册的Bean Class类型
-     * @return 返回注册的Bean
-     */
-    public static <T> T registerBean(String beanName,Class<T> clazz){
-        return registerBean(beanName,clazz,new HashMap<>());
+        beanFactory.removeBeanDefinition(name);
     }
 
     /**
      * bean注册
      *
      * @param beanName 注册的Bean Name
-     * @param clazz   注册的Bean class
-     * @param <T> 注册的Bean Class类型
-     * @param params 注册的Bean 传递的参数
-     * @return  返回注册的Bean
+     * @param clazz    注册的Bean class
+     * @param <T>      注册的Bean Class类型
+     * @return 返回注册的Bean
+     */
+    public static <T> T registerBean(String beanName, Class<T> clazz) {
+        return registerBean(beanName, clazz, null);
+    }
+
+    /**
+     * bean注册
+     *
+     * @param beanName 注册的Bean Name
+     * @param clazz    注册的Bean class
+     * @param <T>      注册的Bean Class类型
+     * @param params   注册的Bean 传递的参数
+     * @return 返回注册的Bean
      */
     public static <T> T registerBean(String beanName, Class<T> clazz, Map<String, Object> params) {
         BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder.genericBeanDefinition(clazz);
-        if(CollectionUtil.isNotEmpty(params)){
+        if (CollectionUtil.isNotEmpty(params)) {
             params.forEach((key, value) -> beanDefinitionBuilder.addPropertyValue(key, value));
         }
-        beanFacotory.registerBeanDefinition(beanName, beanDefinitionBuilder.getBeanDefinition());
+        beanFactory.registerBeanDefinition(beanName, beanDefinitionBuilder.getBeanDefinition());
         return getBean(beanName, clazz);
     }
 

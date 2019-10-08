@@ -15,13 +15,13 @@ import java.lang.reflect.Method;
  */
 public class SpringReflectInvoke implements BaseReflectInvoke {
     @Override
-    public <T> T getMethodToValue(Class<?> clazz, String methodName, Object... params) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
+    public <T> T getMethodToValue(Class<?> clazz, String methodName, Object... params) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         Method method = clazz.getClass().getMethod(methodName);
         return (T) method.invoke(clazz);
     }
 
     @Override
-    public <T> T getMethodToValue(String clazzName, String methodName, Object... params) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, ClassNotFoundException {
+    public <T> T getMethodToValue(String clazzName, String methodName, Object... params) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         Object bean =  SpringContextHolder.getBean(clazzName);
         Class<?>[] clazzes = new Class[params.length];
         int index = 0;
