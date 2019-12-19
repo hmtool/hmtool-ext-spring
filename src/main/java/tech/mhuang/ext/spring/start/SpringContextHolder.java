@@ -108,6 +108,7 @@ public class SpringContextHolder implements ApplicationContextAware {
      * 根据class获取上下文的bean
      *
      * @param requiredType 获取Bean的Class
+     * @param <T>  获取的class类型
      * @return Object 返回对应Bean
      */
     public static <T> T getBean(Class<T> requiredType) {
